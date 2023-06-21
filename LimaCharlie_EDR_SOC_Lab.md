@@ -13,6 +13,20 @@ I will look to conduct a C2 attack against the victim machine, check through the
 I'd like to take the time now to credit (Eric Capuano) for writing this excellent blog post which was followed for this project. This project was only used for personal educational purposes. 
 
 ## PART 1
-The first step was to set up the two virtual environments required. Having already installed and used VMware Workstation 11 for previous labs I could import the required .ISO & .OVF files. The Windows machine would be pre-configured so this would load up and start by itself with no input but the Ubuntu Server would take some configuration. The two major points that needed addressing were 1) setting the static IP address for the machine 2) Installing OpenSSH. 
+The first step was to set up the two virtual environments required. Having already installed and used VMware Workstation 11 for previous labs I could import the required .ISO & .OVF files. The Windows machine would be pre-configured so we can head straight over to our Ubuntu Server, which would take some configuration. The below screenshot shows the static IP address set for Ubuntu Server. This was configured by taking the gateway IP & subnet IP of the VMware Workstation NAT network. By executing this we ensure that the IP will remain the same throughout the lab as we will be required to SSH into the Ubuntu Server at a later date. 
 
-[THIS NOW A COULD POINT TO PUT SOME PICTURES IN]
+<img width="663" alt="Screenshot 2023-06-08 055214" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/e7986d80-e1f2-423d-b039-ce8114ad0ddf">
+
+Now that we have both machines up and running with our specific configurations we'll jump over to the Windows machine to disable some features in Windows Defender permanently, to allow us to conduct our credential-gathering with Sliver-Server later on. First of all, head over to Windows Security and disable all settings under 'Virus & Threat Protection' which includes Real-time Protection, Cloud-delivered Protection, Automatic Sample Submission and Tamper Protection (when turned on, prevents others from tampering with important security features, highlighted in the screenshot below)
+
+<img width="423" alt="Screenshot 2023-06-08 162738" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/1db37d05-744c-4601-95ba-7c302edddf50">
+
+Next, we'll head over to Group Policy Editor and permanently disable Defender by turning off Microsoft Defender Antivirus. After, we'll look to achieve the same goal in Registry via an administrative command prompt (screenshot below)
+
+<img width="462" alt="Screenshot 2023-06-08 164023" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/65d9b7a9-838c-4bf7-a6b9-284d952516db">
+
+Now, we'll Safe Boot (minimal) our Windows machine and when restarted we'll disable some more specific services via the Registry. We'll make our way into Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services to change the value to 4 (Log to a database disabled) of 6 keys including; Sense, WdBoot, WinDefend, WdNisDrv, WinNisSvc and WdFilter. (screenshot below). The final configuration change we'll make is to prevent the Windows machine from going to standby via our administrative command prompt. 
+
+<img width="521" alt="Screenshot 2023-06-08 164857" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/650bdd0c-1c52-4c6c-a764-c8ad0ac18745">
+
+Now, with the Windows machine finely tuned and ready to go, we're going to install Sysmon which gives us granular telemetry from the Windows endpoint. 
