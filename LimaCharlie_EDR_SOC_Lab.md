@@ -29,4 +29,9 @@ Now, we'll Safe Boot (minimal) our Windows machine and when restarted we'll disa
 
 <img width="521" alt="Screenshot 2023-06-08 164857" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/650bdd0c-1c52-4c6c-a764-c8ad0ac18745">
 
-Now, with the Windows machine finely tuned and ready to go, we're going to install Sysmon which gives us granular telemetry from the Windows endpoint. 
+Now, with the Windows machine finely tuned and ready to go, we're going to install Sysmon which gives us more granular telemetry from the Windows endpoint than just LimaCharlie EDR would alone. We'll head over to an administrative Powershell, download and unzip Sysmon and then we'll look to use SwiftOnSecuirty's Sysmon Config [insert link], which the author describes as a 'Microsoft Sysinternals Sysmon configuration file template with high-quality event tracing'. This will help with the telemetry feeding into LimaCharlie. After a quick validation that the service is installed and running, and for the presence of Sysmon Event Logs we can move our attention on to the installation and configuration of LimaCharlie EDR. 
+
+
+<img width="580" alt="Screenshot 2023-06-08 170336" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/77207bd3-d0a7-4edf-82c5-575c01f02444">
+
+
