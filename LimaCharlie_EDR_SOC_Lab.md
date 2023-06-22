@@ -34,4 +34,15 @@ Now, with the Windows machine finely tuned and ready to go, we're going to insta
 
 <img width="580" alt="Screenshot 2023-06-08 170336" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/77207bd3-d0a7-4edf-82c5-575c01f02444">
 
+LimaCharlie EDR [possibly a link] is a SIaaS product with free and paid tiers is 'cybersecurity middleware that gives you full control and visibility over your security posture' the company states on their homepage. Whilst logged on the Windows machine and after a simple signup process, we'll look to install their sensor on the machine. Instead of following the step-by-step installer, we'll skip step two, head over to an Administrative Powershell  'cd' into the Downloads file and run 'Invoke-WebRequest -Uri [https://downloads.limacharlie.io/sensor/windows/64] -Outfile C:\Users\User\Downloads\lc_sensor.exe'. After we can fire up a command prompt and start at step 4 which gives us a specific command to copy and paste. This should complete the installation of the LimaCharlie sensor validated on the command line and in the LimaCharlie GUI. (See screenshot below)
+
+<img width="577" alt="Screenshot 2023-06-08 172520" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/d99b3d7b-d0b9-44be-b264-b42fbdbe4746">
+
+Next, we'll have to configure LimaCharlie to import the Sysmon Event Logs parallel to its native telemetry. This is done via the 'Artifact Collection' tab within LimaCharlie with a small amount of configuration. 
+
+<img width="573" alt="Screenshot 2023-06-09 071924" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/d8372acb-12e1-4777-851e-261bc0478fc6">
+
+(Set up attack system)
+
+
 
