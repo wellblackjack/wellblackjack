@@ -72,5 +72,6 @@ Finally, we'll run 'ps -T' to highlight the running processes on our Windows mac
 
 <img width="492" alt="Screenshot 2023-06-12 164431" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/dc5abab7-b8b4-48b4-abb4-2daa494f8079">
 
+(obverse EDR telemetry so far)
 
 
