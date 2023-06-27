@@ -52,11 +52,11 @@ Firstly in Part 2, we're going to generate our C2 payload in Sliver. After launc
 
 For now, we're done with Sliver-Server so we'll exit the process. Now we need to download the C2 payload onto our Windows machine. Adversaries will find a multitude of different methods to deliver malware like phishing emails or unsuspecting malicious links for example, but for the lab, we'll simply run the command python3 -m http.server 80 to start a temporary web server. Next, we'll swap back into the Windows machine and download our C2 payload which is now staged and ready to exploit. This would now be a good time to snapshot the Windows machine. 
 
-Following the staging of our malware, we can head over to the SSH session of our Ubuntu machine, terminate the python web server and relaunch Sliver. In order to start the session on Sliver, you'll need to start the Sliver HTTP listener with the simple command of 'http', head back to the Windows machine, and execute the C2 payload from an administrative PowerShell. When you head back over to the Ubuntu SSH session this should appear in Sliver. You can verify the payload has been executed correctly by the command 'sessions' and seeing the green 'ALIVE' in the health tab. (see screenshot below)
+Following the staging of our malware, we can head over to the SSH session of our Ubuntu machine, terminate the Python web server and relaunch Sliver. To start the session on Sliver, you'll need to start the Sliver HTTP listener with the simple command of 'http', head back to the Windows machine, and execute the C2 payload from an administrative PowerShell. When you head back over to the Ubuntu SSH session this should appear in Sliver. You can verify the payload has been executed correctly by the command 'sessions' and seeing the green 'ALIVE' in the health tab. (see screenshot below)
 
 <img width="249" alt="Screenshot 2023-06-12 164015" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/71514afd-0f99-405a-b01c-d578fbd913c3">
 
-We will now look to interact with our C2 session by the command 'use [session id]' which is found previously in the 'sessions' command. This means we are interacting with the Windows machine via our C2 payload. We can verify this with basic commands like 'info' and 'whoami'. 'getprivs' will display the privileges available to us. Some of the privileges will interest us, particularly 'SeDebugPrivilege' which is enabled. Chen, R (2008) via Microsoft's website explains 'from a security perspective, SeDebugPrivilege is equivalent to administrator' making our future credential gathering much easier in the future. 
+We will now look to interact with our C2 session using the command 'use [session id]' found previously in the 'sessions' command. This means we are interacting with the Windows machine via our C2 payload. We can verify this with basic commands like 'info' and 'whoami'. 'getprivs' will display the privileges available to us. Some of the privileges will interest us, particularly 'SeDebugPrivilege' which is enabled. Chen, R (2008) via Microsoft's website explains 'from a security perspective, SeDebugPrivilege is equivalent to administrator' making our future credential gathering much easier in the future. 
 
 <img width="496" alt="Screenshot 2023-06-12 164136" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/ba808f44-5072-497b-88cb-c7a986fe71a2">
 
@@ -68,10 +68,16 @@ We'll continue to identify the characteristics of the Windows machine with more 
 
 <img width="492" alt="Screenshot 2023-06-12 164335" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/5e8441f6-58e2-4ab4-826c-b639d4d25cca">
 
-Finally, we'll run 'ps -T' to highlight the running processes on our Windows machine. It should be noted (displayed in the screenshot below) that Sliver-Server will clearly highlight defensive processes in red (like Sysmon) alongside displaying the security products any attacker will need to be aware of or navigate around next to a yellow warning sign. It will also highlight its own native process i.e. our C2 implant in green. These actions should trigger some telemetry in LimaCharlie, so now we can head over to our EDR solution. 
+Finally, we'll run 'ps -T' to highlight the running processes on our Windows machine. It should be noted (displayed in the screenshot below) that Sliver-Server will highlight defensive processes in red (like Sysmon) alongside displaying the security products any attacker will need to be aware of or navigate around next to a yellow warning sign. It will also highlight its native process i.e. our C2 implant in green. These actions should trigger some telemetry in LimaCharlie, so now we can head over to our EDR solution. 
 
 <img width="492" alt="Screenshot 2023-06-12 164431" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/dc5abab7-b8b4-48b4-abb4-2daa494f8079">
 
-(obverse EDR telemetry so far)
+[Writing this at 5:30 am so triple proofread]
+
+When in the GUI for LimaChalrie, there are various places we can be investigating for suspicious activity. The 'sensors' tab allows us to view all deployed sensors, having only one for this demonstration we'll head there. Within our Windows sensor, we can start to do some investigating. Firstly, the 'Processes' tab will display all running processes, alongside whether the process has a valid signature. You'll notice all of the native Windows processes but under closer inspection, you'll obverse the C2 implant running without a valid signature and destination IP address in which the process is communicating, creating our first indicator of compromise. 
+
+<img width="649" alt="Screenshot 2023-06-12 164728" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/7d80559c-3c9d-4663-9070-3ad786bc6c4f">
+
+
 
 
