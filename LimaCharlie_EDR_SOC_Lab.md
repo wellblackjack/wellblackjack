@@ -74,13 +74,15 @@ Finally, we'll run 'ps -T' to highlight the running processes on our Windows mac
 
 [Writing this at 5:30 am so triple proofread]
 
-When in the GUI for LimaChalrie, there are various places we can be investigating for suspicious activity. The 'sensors' tab allows us to view all deployed sensors, having only one for this demonstration we'll head there. Within our Windows sensor, we can start to do some investigating. Firstly, the 'Processes' tab will display all running processes, alongside whether the process has a valid signature. You'll notice all of the native Windows processes but under closer inspection, you'll obverse the C2 implant running without a valid signature and destination IP address in which the process is communicating, creating our first indicator of compromise. 
+When in the GUI for LimaChalrie, there are various places we can be investigating for suspicious activity. The 'sensors' tab allows us to view all deployed sensors, having only one for this demonstration we'll head there. Within our Windows sensor, we can start to do some investigating. Firstly, the 'Processes' tab will display all running processes, alongside whether the process has a valid signature. You'll notice all of the native Windows processes but under closer inspection, you'll obverse the C2 implant running without a valid signature and destination IP address in which the process is communicating, creating our first indicator of compromise.
 
-[As  security analysts, we should be able to define the normal for this type of machine] (continue writing) 
+As a side note, for security analysts, it is critically important to understand what is normal, in order to understand when something is abnormal and potentially malicious. However, it should be considered that malicious processes are able to use trusted, pre-installed system tools and processes. [LOLBINS] is a helpful tool which can help us identify how malware uses said trusted tools and processes by displaying the binary, functions, type and ATT&CK techniques. Some of the capabilities of this technique include; DLL hijacking, process dumping & hiding payloads to name a few. 
 
-We can further validate this by heading to the 'Network'
+Jumping back into LimaCharlie, we can further validate this by heading to the 'Network' tab (see screenshot below). We are able to view the network connections for the running processes, including (if we search for it) our C2 payload and the IP addresses it's communicating with.
 
-<img width="649" alt="Screenshot 2023-06-12 164728" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/7d80559c-3c9d-4663-9070-3ad786bc6c4f">
+<img width="798" alt="Screenshot 2023-06-12 164910" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/4ea0256c-659a-46c2-9a4b-4cf218af5d59">
+
+ We can also use the 'File System' tab to inspect remote machines. As we planted the C2 payload we know exactly where to look in C:\Users\User\Downloads (CONTU
 
 
 
