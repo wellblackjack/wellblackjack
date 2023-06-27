@@ -76,6 +76,10 @@ Finally, we'll run 'ps -T' to highlight the running processes on our Windows mac
 
 When in the GUI for LimaChalrie, there are various places we can be investigating for suspicious activity. The 'sensors' tab allows us to view all deployed sensors, having only one for this demonstration we'll head there. Within our Windows sensor, we can start to do some investigating. Firstly, the 'Processes' tab will display all running processes, alongside whether the process has a valid signature. You'll notice all of the native Windows processes but under closer inspection, you'll obverse the C2 implant running without a valid signature and destination IP address in which the process is communicating, creating our first indicator of compromise. 
 
+[As  security analysts, we should be able to define the normal for this type of machine] (continue writing) 
+
+We can further validate this by heading to the 'Network'
+
 <img width="649" alt="Screenshot 2023-06-12 164728" src="https://github.com/wellblackjack/wellblackjack/assets/125303146/7d80559c-3c9d-4663-9070-3ad786bc6c4f">
 
 
